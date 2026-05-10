@@ -1,0 +1,8 @@
+{
+  "name": "给爸爸妈妈的生活指南",
+  "short_name": "生活指南",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#F7F8FA",
+  "theme_color": "#07C160"
+}

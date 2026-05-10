@@ -1,0 +1,1295 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07C160" />
+    <meta name="description" content="郝煜伽给爸爸妈妈整理的生活指南。" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <title>给爸爸妈妈的生活指南</title>
+    <style>
+      :root {
+        --bg: #f7f8fa;
+        --green: #07c160;
+        --green-dark: #069a4c;
+        --green-soft: #e8f5e9;
+        --card: #ffffff;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --line: #e5e7eb;
+        --warm: #fff7e8;
+        --warn: #f59e0b;
+        --red-soft: #fff1f2;
+        --shadow: 0 8px 24px rgba(31, 41, 55, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif;
+        font-size: 19px;
+        line-height: 1.75;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      button {
+        border: 0;
+        cursor: pointer;
+      }
+
+      a {
+        color: var(--green-dark);
+        text-decoration: none;
+      }
+
+      .app {
+        min-height: 100vh;
+        padding-bottom: 98px;
+      }
+
+      .page {
+        width: min(920px, 100%);
+        margin: 0 auto;
+        padding: 18px 16px 34px;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: rgba(247, 248, 250, 0.96);
+        border-bottom: 1px solid rgba(229, 231, 235, 0.9);
+        backdrop-filter: blur(12px);
+      }
+
+      .topbar-inner {
+        width: min(920px, 100%);
+        min-height: 64px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 88px 1fr 88px;
+        align-items: center;
+        padding: 8px 16px;
+      }
+
+      .back-btn {
+        min-height: 46px;
+        border-radius: 999px;
+        background: #ffffff;
+        color: var(--text);
+        border: 1px solid var(--line);
+      }
+
+      .top-title {
+        margin: 0;
+        text-align: center;
+        font-size: 28px;
+        line-height: 1.25;
+        font-weight: 800;
+        letter-spacing: 0;
+      }
+
+      .hero {
+        background: linear-gradient(180deg, #ffffff 0%, #f1fff6 100%);
+        border-radius: 18px;
+        padding: 28px 22px;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(7, 193, 96, 0.12);
+      }
+
+      .hero h1 {
+        margin: 0;
+        text-align: center;
+        font-size: 32px;
+        line-height: 1.35;
+      }
+
+      .hero p {
+        margin: 18px 0 0;
+        color: #374151;
+        font-size: 20px;
+        text-align: center;
+      }
+
+      .section-title {
+        margin: 28px 2px 14px;
+        font-size: 24px;
+        line-height: 1.35;
+        font-weight: 800;
+      }
+
+      .grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 20px;
+        box-shadow: 0 5px 18px rgba(31, 41, 55, 0.05);
+      }
+
+      .card.warm {
+        background: var(--warm);
+        border-color: #fde7bd;
+      }
+
+      .card.green {
+        background: var(--green-soft);
+        border-color: #cdebd2;
+      }
+
+      .card.red-soft {
+        background: var(--red-soft);
+        border-color: #fecdd3;
+      }
+
+      .card h2,
+      .card h3 {
+        margin: 0 0 12px;
+        font-size: 22px;
+        line-height: 1.4;
+      }
+
+      .card p {
+        margin: 8px 0;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .small {
+        font-size: 15px;
+        line-height: 1.65;
+      }
+
+      .action-card {
+        min-height: 136px;
+        width: 100%;
+        padding: 20px;
+        border-radius: 20px;
+        background: #ffffff;
+        color: var(--text);
+        border: 1px solid var(--line);
+        box-shadow: 0 6px 18px rgba(31, 41, 55, 0.06);
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .action-card:active,
+      .primary-btn:active,
+      .toggle-btn:active,
+      .nav-btn:active {
+        transform: scale(0.985);
+      }
+
+      .action-icon {
+        width: 54px;
+        height: 54px;
+        border-radius: 18px;
+        display: grid;
+        place-items: center;
+        background: #effdf4;
+        font-size: 30px;
+      }
+
+      .action-title {
+        display: block;
+        font-size: 22px;
+        font-weight: 800;
+        line-height: 1.35;
+      }
+
+      .action-desc {
+        display: block;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.55;
+      }
+
+      .page-band {
+        margin: 12px 0 18px;
+        padding: 22px;
+        border-radius: 20px;
+        background: #ffffff;
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+      }
+
+      .page-band h1 {
+        margin: 0;
+        font-size: 28px;
+        line-height: 1.35;
+      }
+
+      .page-band p {
+        margin: 12px 0 0;
+        font-size: 20px;
+        color: #374151;
+      }
+
+      .tip-list,
+      .number-list {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .tip-list li,
+      .number-list li {
+        background: #f9fafb;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px 14px;
+      }
+
+      .number-list {
+        counter-reset: item;
+      }
+
+      .number-list li {
+        display: grid;
+        grid-template-columns: 34px 1fr;
+        align-items: start;
+        gap: 8px;
+      }
+
+      .number-list li::before {
+        counter-increment: item;
+        content: counter(item);
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: var(--green);
+        color: white;
+        font-size: 17px;
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      .columns {
+        display: grid;
+        gap: 14px;
+      }
+
+      .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .pill {
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: #f3f4f6;
+        border: 1px solid var(--line);
+        font-size: 17px;
+      }
+
+      .primary-btn {
+        width: 100%;
+        min-height: 60px;
+        border-radius: 16px;
+        background: var(--green);
+        color: white;
+        font-size: 21px;
+        font-weight: 800;
+      }
+
+      .soft-btn {
+        background: #ffffff;
+        color: var(--text);
+        border: 1px solid var(--line);
+      }
+
+      .check-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .toggle-btn {
+        width: 100%;
+        min-height: 62px;
+        border-radius: 16px;
+        padding: 12px 14px;
+        text-align: left;
+        background: #ffffff;
+        border: 1px solid var(--line);
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .toggle-btn.done {
+        background: var(--green-soft);
+        border-color: #bfe7c7;
+      }
+
+      .toggle-main {
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.35;
+      }
+
+      .toggle-mark {
+        flex: 0 0 auto;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #f3f4f6;
+        color: var(--muted);
+        font-weight: 900;
+      }
+
+      .toggle-btn.done .toggle-mark {
+        background: var(--green);
+        color: #ffffff;
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .field label {
+        font-weight: 800;
+        font-size: 20px;
+      }
+
+      .field select {
+        min-height: 58px;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        background: #ffffff;
+        color: var(--text);
+        padding: 0 14px;
+      }
+
+      .plate {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .plate .veg {
+        grid-row: span 2;
+        background: #e8f5e9;
+      }
+
+      .plate div {
+        min-height: 112px;
+        border-radius: 18px;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        padding: 12px;
+        font-size: 20px;
+        font-weight: 800;
+        border: 1px solid var(--line);
+      }
+
+      .table {
+        display: grid;
+        gap: 10px;
+      }
+
+      .table-row {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 10px;
+        padding: 12px;
+        background: #f9fafb;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+      }
+
+      .bottom-nav {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 20;
+        background: #ffffff;
+        border-top: 1px solid var(--line);
+        box-shadow: 0 -8px 24px rgba(31, 41, 55, 0.08);
+      }
+
+      .bottom-inner {
+        width: min(920px, 100%);
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 4px;
+        padding: 8px 8px 10px;
+      }
+
+      .nav-btn {
+        min-height: 64px;
+        border-radius: 14px;
+        background: transparent;
+        color: var(--muted);
+        display: grid;
+        place-items: center;
+        gap: 2px;
+        font-size: 15px;
+      }
+
+      .nav-btn strong {
+        font-size: 24px;
+        line-height: 1;
+      }
+
+      .nav-btn.active {
+        color: var(--green-dark);
+        background: #effdf4;
+        font-weight: 800;
+      }
+
+      @media (min-width: 720px) {
+        .page {
+          padding: 28px 24px 48px;
+        }
+
+        .grid.two,
+        .columns {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .check-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .hero {
+          padding: 34px 32px;
+        }
+      }
+
+      @media (max-width: 430px) {
+        body {
+          font-size: 18px;
+        }
+
+        .grid.two {
+          grid-template-columns: 1fr;
+        }
+
+        .topbar-inner {
+          grid-template-columns: 76px 1fr 76px;
+          padding: 8px 12px;
+        }
+
+        .top-title {
+          font-size: 25px;
+        }
+
+        .hero h1 {
+          font-size: 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" class="app"></div>
+    <script>
+      const $ = (selector) => document.querySelector(selector);
+      const h = (value) =>
+        String(value).replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;",
+        }[char]));
+
+      const todayKey = new Date().toISOString().slice(0, 10);
+      const dadKey = "parents-helper-dad";
+      const momKey = "parents-helper-mom";
+
+      const defaults = {
+        dad: { day: todayKey, wokeEarly: false, exercised: false, sleptEarly: false, lessAlcohol: false, goodMood: false },
+        mom: { day: todayKey, walked: false, protein: false, goodMood: false, appetite: "还可以" },
+      };
+
+      function loadState(key, fallback) {
+        try {
+          const saved = JSON.parse(localStorage.getItem(key) || "{}");
+          return saved.day === todayKey ? { ...fallback, ...saved } : { ...fallback };
+        } catch {
+          return { ...fallback };
+        }
+      }
+
+      let page = "home";
+      let applianceId = "air";
+      let dadState = loadState(dadKey, defaults.dad);
+      let momState = loadState(momKey, defaults.mom);
+
+      const homeActions = [
+        { title: "爸爸健康提醒", desc: "早起、少喝酒、早点睡、身体舒服最重要。", icon: "👨", page: "dad" },
+        { title: "妈妈健康提醒", desc: "吃点蛋白质，出门走走，心情也要轻松一点。", icon: "👩", page: "mom" },
+      ];
+
+      const guideActions = [
+        { title: "家电安心指南", desc: "空调、空气质量、微波炉、冰箱、燃气都能慢慢查。", icon: "🏠", page: "appliances" },
+        { title: "肉蛋奶水果蔬菜百科", desc: "像小百科一样，查每天吃什么、有什么用、吃多少。", icon: "🥗", page: "foodGuide" },
+      ];
+
+      const applianceGuides = [
+        {
+          id: "air",
+          icon: "❄️",
+          title: "空调与空气质量",
+          summary: "主要看手机天气 APP 里的空气质量指数，以及空调面板上常见数字。",
+          sections: [
+            {
+              title: "手机上天气 APP 中空气质量指数怎么看",
+              type: "number",
+              items: [
+                "0-50：空气质量优，正常开窗通风一般没问题。",
+                "51-100：空气质量良，大多数时候可以正常活动。",
+                "101-150：轻度污染，老人和身体不舒服时少开窗太久。",
+                "151-200：中度污染，尽量减少长时间开窗和户外活动。",
+                "201 以上：污染较重，优先关窗，必要时开空气净化器。",
+              ],
+            },
+            {
+              title: "空调控制面板上显示常见数字",
+              type: "number",
+              items: [
+                "温度：一般显示 16-30℃，数字越低越凉，数字越高越暖。",
+                "湿度：一般 40%-60% 比较舒服，太低容易干，太高容易闷。",
+                "PM2.5：数值越低越好，超过 75 时建议减少开窗。",
+                "CO2：800ppm 以下通常比较舒服，超过 1000ppm 说明屋里可能有点闷。",
+                "甲醛：如果长期显示偏高，要多通风、减少刺激性气味来源，必要时找专业检测。",
+              ],
+            },
+            {
+              title: "小提醒",
+              type: "number",
+              items: [
+                "去甲醛最实用的方法是长期通风，白天条件合适时开窗 20-30 分钟。",
+                "新家具、新窗帘、新柜子味道重时，先多开柜门通风，不要急着把房间关得很严。",
+                "活性炭可以辅助吸附异味，但要定期更换，放很久不换效果会变差。",
+                "提高空气质量可以先做三件事：开窗通风、清理灰尘、保持空调滤网干净。",
+                "室内空气不好常见原因有：长时间不开窗、做饭油烟、吸烟、潮湿发霉、新家具味道、灰尘堆积。",
+              ],
+            },
+          ],
+          refs: [
+            ["生态环境部《环境空气质量指数 AQI 技术规定（试行）》", "https://www.mee.gov.cn/ywgz/fgbz/bz/bzwb/jcffbz/201203/t20120302_224166.shtml"],
+            ["中国疾病预防控制中心：室内空气与健康相关科普", "https://www.chinacdc.cn/"],
+          ],
+        },
+        {
+          id: "microwave",
+          icon: "🔥",
+          title: "微波炉材质",
+          summary: "先看容器材质，能不能加热比加热多久更重要。",
+          sections: [
+            {
+              title: "可以放进微波炉",
+              type: "number",
+              items: [
+                "标有“微波炉适用”的玻璃碗、玻璃杯。",
+                "标有“微波炉适用”的陶瓷碗。",
+                "标有“5 PP”或“微波炉适用”的塑料盒。",
+                "微波炉专用保鲜膜，但不要让保鲜膜直接贴住食物。",
+              ],
+            },
+            {
+              title: "不要放进微波炉",
+              type: "number",
+              items: [
+                "金属碗、铁盘、不锈钢杯、带金边银边的碗。",
+                "普通一次性塑料盒、外卖盒、酸奶盒。",
+                "纸袋、报纸、普通塑料袋。",
+                "完整带壳鸡蛋、密封罐、密封瓶，容易受热膨胀。",
+              ],
+            },
+            {
+              title: "加热小提醒",
+              type: "number",
+              items: [
+                "汤和粥加热后先放一小会儿，再慢慢搅一搅。",
+                "盒饭加热时，把盖子留一点缝，不要完全密封。",
+                "油多、糖多的食物不要一次加热太久。",
+              ],
+            },
+          ],
+          refs: [
+            ["国家市场监督管理总局：食品接触用塑料材料及制品相关标准", "https://www.samr.gov.cn/"],
+            ["中国食品科学技术学会食品安全科普", "https://www.cifst.org.cn/"],
+          ],
+        },
+        {
+          id: "fridge",
+          icon: "🧊",
+          title: "冰箱保存时间",
+          summary: "冷藏和冷冻分开看，生熟分开，闻着不对就不要吃。",
+          sections: [
+            {
+              title: "冷藏室大概能放多久",
+              type: "number",
+              items: [
+                "熟米饭、熟面条：1-2 天，吃前要彻底加热。",
+                "熟肉、熟菜：1-2 天，最好当天或第二天吃完。",
+                "生猪肉、生牛肉、生羊肉：1-2 天。",
+                "生鸡肉、鸭肉：1-2 天。",
+                "鱼虾：当天或 1 天内更稳妥。",
+                "鸡蛋：一般 3-5 周，放冰箱时不要反复清洗。",
+                "绿叶菜：2-3 天，越新鲜越好。",
+                "苹果、橙子：1-3 周，坏了一处要及时挑出来。",
+              ],
+            },
+            {
+              title: "冷冻室大概能放多久",
+              type: "number",
+              items: [
+                "猪肉、牛肉、羊肉：一般 3-6 个月内吃完更好。",
+                "鸡肉、鸭肉：一般 3-6 个月内吃完更好。",
+                "鱼虾：一般 1-3 个月内吃完更好，放久了口感会变差。",
+                "饺子、馄饨：一般 1-2 个月内吃完更好。",
+                "馒头、包子：一般 1 个月内吃完更好。",
+                "冷冻蔬菜：一般 1-3 个月内吃完更好。",
+              ],
+            },
+            {
+              title: "最重要的三件事",
+              type: "number",
+              items: [
+                "生肉要单独包好，别碰到熟菜和水果。",
+                "剩饭剩菜放凉后尽快进冰箱，不要在桌上放一整晚。",
+                "拿出来解冻过的肉，尽量不要反复冻回去。",
+              ],
+            },
+          ],
+          refs: [
+            ["中国营养学会《中国居民膳食指南（2022）》", "https://dg.cnsoc.org/"],
+            ["国家食品安全风险评估中心食品安全科普", "https://www.cfsa.net.cn/"],
+          ],
+        },
+        {
+          id: "gas",
+          icon: "🍳",
+          title: "燃气安全",
+          summary: "做饭前后多看一眼，闻到味道先通风。",
+          sections: [
+            {
+              title: "每天做饭前",
+              type: "number",
+              items: [
+                "看灶台周围有没有纸巾、塑料袋、油布等容易着火的东西。",
+                "先开油烟机或窗户，让厨房空气流通。",
+                "点火后看火苗，正常多为蓝色，明显发黄要留意。",
+              ],
+            },
+            {
+              title: "做完饭后",
+              type: "number",
+              items: [
+                "先关灶具开关，再确认燃气阀门关好。",
+                "锅别空烧，离开厨房前看一眼火有没有完全灭。",
+                "油锅起火不要倒水，先关火，用锅盖盖住。",
+              ],
+            },
+            {
+              title: "闻到燃气味",
+              type: "number",
+              items: [
+                "不要开灯，不要打火，不要插拔电器。",
+                "先关阀门，打开门窗通风。",
+                "到室外安全地方再联系燃气公司或孩子。",
+              ],
+            },
+          ],
+          refs: [
+            ["住房和城乡建设部燃气安全相关公开资料", "https://www.mohurd.gov.cn/"],
+            ["中国城市燃气协会安全用气提示", "https://www.chinagas.org.cn/"],
+          ],
+        },
+        {
+          id: "heater",
+          icon: "♨️",
+          title: "热水器与洗澡安全",
+          summary: "洗澡舒服最重要，也要注意通风和防滑。",
+          sections: [
+            {
+              title: "洗澡前",
+              type: "number",
+              items: [
+                "先试水温，不要一上来就把水开得太热。",
+                "浴室地面有水时先擦一下，防止滑倒。",
+                "冬天洗澡也要留一点通风，不要把浴室闷得太久。",
+              ],
+            },
+            {
+              title: "洗澡时",
+              type: "number",
+              items: [
+                "时间不要太长，感觉胸闷、头晕就先出来休息。",
+                "不要空腹洗很久，也不要刚喝酒后洗热水澡。",
+                "家里没人时，洗澡门不要反锁太死。",
+              ],
+            },
+          ],
+          refs: [
+            ["中国疾病预防控制中心：家庭安全与健康相关科普", "https://www.chinacdc.cn/"],
+          ],
+        },
+      ];
+
+      const foodItems = [
+        ["鸡蛋", "优质蛋白，含有卵磷脂、维生素和矿物质，对维持肌肉和日常体力有帮助。", "一般每天 1 个左右即可；如果医生有特殊要求，按医生说的来。"],
+        ["牛奶", "补钙、补蛋白，对骨骼、牙齿和肌肉都有帮助。", "每天 250-300 毫升左右，喝了肚子不舒服可以少量多次。"],
+        ["酸奶", "含蛋白质和钙，部分酸奶也有助于肠道舒服。", "选择原味、少糖的更好，每天 1 小杯左右。"],
+        ["鱼", "优质蛋白，脂肪相对温和，适合中老年人经常换着吃。", "每周 2 次左右，清蒸、炖汤比油炸更舒服。"],
+        ["虾", "蛋白质较高，口感软，适合胃口一般时少量吃。", "一次不用多，手掌心一小份即可。"],
+        ["鸡肉", "瘦肉蛋白，脂肪相对少，容易做得软烂。", "去皮、炖煮、清炒都可以，少放油。"],
+        ["瘦猪肉", "提供蛋白质和铁，能帮身体维持力气。", "选择瘦肉，一次一小掌心大小即可。"],
+        ["豆腐", "植物蛋白，口感软，适合胃口不好时吃一点。", "可以炖汤、清蒸、少油煎，每天半块左右即可。"],
+        ["豆浆", "植物蛋白，早上喝一点比较方便。", "选择少糖或无糖，喝熟豆浆，不喝生豆浆。"],
+        ["燕麦", "膳食纤维较多，升糖相对慢，更容易有饱腹感。", "早餐可以小半碗到一碗，别额外加很多糖。"],
+        ["小米粥", "温和、好入口，胃口不好时比较容易吃下去。", "一餐一小碗即可，最好搭配鸡蛋、豆腐或牛奶。"],
+        ["红薯", "有膳食纤维，比纯白面主食更容易饱。", "一次半个到一个小红薯，替代一部分面条或馒头。"],
+        ["南瓜", "口感软，有膳食纤维和胡萝卜素。", "可以蒸着吃或煮粥，一次一小块即可。"],
+        ["菠菜", "含叶酸、钾和膳食纤维，有助于补充蔬菜量。", "焯水后凉拌或清炒，少油少盐。"],
+        ["西兰花", "含维生素 C 和膳食纤维，饱腹感不错。", "焯水后清炒或蒸着吃，口感软一点更好。"],
+        ["胡萝卜", "含胡萝卜素，对日常营养补充有帮助。", "炒菜、炖汤都可以，熟吃更好入口。"],
+        ["西红柿", "酸甜开胃，含维生素和水分。", "可以炒鸡蛋、做汤，胃酸明显时少吃太酸的。"],
+        ["黄瓜", "水分多，清爽，适合作为配菜。", "凉拌时少盐，肠胃不舒服时可以少吃生冷。"],
+        ["苹果", "含果胶和膳食纤维，比较日常、方便。", "一天半个到一个，牙口不好可以切小块或蒸一下。"],
+        ["橙子", "含维生素 C，味道清爽。", "一天一个中等大小即可，胃酸明显时少吃。"],
+        ["香蕉", "软、方便入口，含钾。", "一次半根到一根即可，血糖需要控制时别一次吃太多。"],
+        ["猕猴桃", "含维生素 C 和膳食纤维。", "一天一个即可，太酸或胃不舒服时少吃。"],
+        ["蓝莓", "含花青素，口感小，吃起来方便。", "一小把即可，不需要吃很多。"],
+        ["核桃", "含健康脂肪，也有一定蛋白质。", "每天 1-2 个核桃仁即可，别一把一把吃。"],
+        ["花生", "有蛋白质和脂肪，顶饿。", "少量即可，优先原味，不选油炸和重盐。"],
+        ["芝麻", "含钙和健康脂肪，可以少量搭配。", "撒一点在粥里或菜里即可。"],
+      ];
+
+      function save(scope) {
+        if (scope === "dad") localStorage.setItem(dadKey, JSON.stringify(dadState));
+        if (scope === "mom") localStorage.setItem(momKey, JSON.stringify(momState));
+      }
+
+      function header(title, canBack = page !== "home") {
+        return `
+          <div class="topbar">
+            <div class="topbar-inner">
+              ${canBack ? '<button class="back-btn" data-back>← 返回</button>' : "<span></span>"}
+              <h1 class="top-title">${h(title)}</h1>
+              <span></span>
+            </div>
+          </div>
+        `;
+      }
+
+      function bottomNav() {
+        const items = [
+          ["home", "🏠", "首页"],
+          ["mom", "👩", "妈妈"],
+          ["dad", "👨", "爸爸"],
+          ["knowledge", "📚", "知识普及"],
+        ];
+        const activeGroup = page === "home" ? "home" : page === "dad" ? "dad" : ["mom", "momDiet", "momExercise"].includes(page) ? "mom" : "knowledge";
+        return `
+          <nav class="bottom-nav">
+            <div class="bottom-inner">
+              ${items.map(([id, icon, label]) => `
+                <button class="nav-btn ${activeGroup === id ? "active" : ""}" data-page="${id}">
+                  <strong>${icon}</strong>
+                  <span>${label}</span>
+                </button>
+              `).join("")}
+            </div>
+          </nav>
+        `;
+      }
+
+      function actionGrid(items) {
+        return `<div class="grid two">${items.map((item) => `
+          <button class="action-card" data-page="${h(item.page)}">
+            <span class="action-icon">${h(item.icon)}</span>
+            <span>
+              <span class="action-title">${h(item.title)}</span>
+              <span class="action-desc">${h(item.desc)}</span>
+            </span>
+          </button>
+        `).join("")}</div>`;
+      }
+
+      function pageBand(title, text = "") {
+        return `<section class="page-band"><h1>${h(title)}</h1>${text ? `<p>${h(text)}</p>` : ""}</section>`;
+      }
+
+      function list(items, numbered = false) {
+        return `<ul class="${numbered ? "number-list" : "tip-list"}">${items.map((item) => `<li>${h(item)}</li>`).join("")}</ul>`;
+      }
+
+      function card(title, body, className = "") {
+        return `<section class="card ${className}"><h2>${h(title)}</h2>${body}</section>`;
+      }
+
+      function refs(items) {
+        if (!items || !items.length) return "";
+        return `<section class="card"><h2>参考来源</h2><div class="tip-list">
+          ${items.map(([label, url]) => `<p class="small"><a href="${h(url)}" target="_blank" rel="noopener noreferrer">${h(label)}</a></p>`).join("")}
+        </div></section>`;
+      }
+
+      function healthFooter() {
+        return card("慢慢来", `
+          <p>慢慢来，照顾好身体，比什么都重要。</p>
+          <p>规律一点、舒服一点，就已经很好了。</p>
+          <p class="small muted">部分内容参考《中国居民膳食指南（2022）》等公开健康建议，仅作为家庭生活参考。</p>
+        `, "warm");
+      }
+
+      function checkButton(scope, key, text, done) {
+        return `
+          <button class="toggle-btn ${done ? "done" : ""}" data-toggle-scope="${scope}" data-toggle-key="${key}">
+            <span class="toggle-main">${h(text)}</span>
+            <span class="toggle-mark">${done ? "✓" : "○"}</span>
+          </button>
+        `;
+      }
+
+      function renderHome() {
+        return `
+          ${header("给爸爸妈妈的生活指南", false)}
+          <main class="page">
+            <section class="hero">
+              <h1>给爸爸妈妈的生活指南</h1>
+              <p>郝煜伽给爸爸妈妈整理的生活指南。儿女不在身边，爸爸妈妈用这个网站把自己照顾好。</p>
+            </section>
+
+            <h2 class="section-title">今天先记住三件事</h2>
+            <div class="grid">
+              ${card("爸爸", list(["早上动一动，身体会轻松一点。", "酒少喝一点，晚上尽量早点睡。", "少抽烟，呼吸会舒服一点。"], true), "green")}
+              ${card("妈妈", list(["吃一点蛋白质。", "早点睡觉。", "出门呼吸新鲜空气。"], true), "warm")}
+              ${card("爸爸妈妈", "<p>今天也要记得开心，别太大压力了。</p>", "warm")}
+            </div>
+
+            <h2 class="section-title">常用入口</h2>
+            ${actionGrid(homeActions)}
+
+            <h2 class="section-title">慢慢看的生活提醒</h2>
+            ${actionGrid(guideActions)}
+          </main>
+          ${bottomNav()}
+        `;
+      }
+
+      function renderKnowledge() {
+        return `
+          ${header("知识普及")}
+          <main class="page">
+            ${pageBand("像小百科一样慢慢查", "生活里常用、常吃、常注意的事，都整理成大字卡片。")}
+            ${actionGrid(guideActions)}
+          </main>
+          ${bottomNav()}
+        `;
+      }
+
+      function renderAppliances() {
+        return `
+          ${header("家电安心指南")}
+          <main class="page">
+            ${pageBand("家电安心指南")}
+            <div class="grid two">
+              ${applianceGuides.map((item) => `
+                <button class="action-card" data-appliance="${h(item.id)}">
+                  <span class="action-icon">${h(item.icon)}</span>
+                  <span>
+                    <span class="action-title">${h(item.title)}</span>
+                    <span class="action-desc">${h(item.summary)}</span>
+                  </span>
+                </button>
+              `).join("")}
+            </div>
+          </main>
+          ${bottomNav()}
+        `;
+      }
+
+      function renderApplianceDetail() {
+        const guide = applianceGuides.find((item) => item.id === applianceId) || applianceGuides[0];
+        return `
+          ${header(guide.title)}
+          <main class="page">
+            ${pageBand(`${guide.icon} ${guide.title}`, guide.summary)}
+            <div class="grid">
+              ${guide.sections.map((section) => card(section.title, list(section.items, section.type === "number"))).join("")}
+              ${refs(guide.refs)}
+            </div>
+          </main>
+          ${bottomNav()}
+        `;
+      }
+
+      function renderDad() {
+        return `
+          ${header("爸爸")}
+          <main class="page">
+            ${pageBand("爸爸身体健康最重要", "爸爸工作累，操心多，要注意身体。")}
+
+            ${card("爸爸今日打卡", `
+              <div class="check-grid">
+                ${checkButton("dad", "wokeEarly", "今天早起了吗？", dadState.wokeEarly)}
+                ${checkButton("dad", "exercised", "今天锻炼身体了吗？", dadState.exercised)}
+                ${checkButton("dad", "sleptEarly", "今天早睡了吗？", dadState.sleptEarly)}
+                ${checkButton("dad", "lessAlcohol", "今天少喝酒了吗？", dadState.lessAlcohol)}
+                ${checkButton("dad", "goodMood", "今天心情好吗？", dadState.goodMood)}
+              </div>
+            `, "green")}
+
+            ${card("喝酒提醒", `
+              ${list([
+                "爸爸平时喝的是中国白酒，常见度数大约 40-60 度，很多白酒在 50 度左右。",
+                "白酒度数高，酒精进入身体后需要肝脏慢慢处理，喝多了身体负担会明显增加。",
+                "酒精可能让血糖先升后降，也可能影响第二天血糖稳定。",
+                "晚上喝酒容易让睡眠变浅，半夜醒、口渴、第二天没精神都更常见。",
+                "工作累、操心多时再喝酒熬夜，身体恢复会更慢。",
+                "成年人如饮酒，每天酒精建议不超过 15g。50 度白酒大约 38ml 就接近这个量，差不多不到一个小酒杯。",
+                "少喝一点，身体会轻松很多。",
+              ], true)}
+            `, "warm")}
+
+            ${card("熬夜对身体的影响", `
+              ${list([
+                "熬夜会让身体调节血糖的能力变差，第二天血糖更容易波动。",
+                "睡少了会增加疲劳感，早上起来容易觉得沉、累、没力气。",
+                "长期睡眠不足会影响心情，容易烦躁、焦虑，也更难集中精神。",
+                "熬夜后身体恢复时间变短，白天工作压力会更难扛。",
+              ], true)}
+            `)}
+
+            ${card("糖尿病饮食：尽量少一点", `
+              ${list([
+                "白粥：吸收快，容易让血糖升得快。",
+                "白馒头：主要是精制面粉，吃多了血糖容易上来。",
+                "大量面条：面条不是不能吃，但一大碗容易让主食超量。",
+                "大量面食：饼、馒头、面条叠在一起吃时，主食容易过多。",
+              ], true)}
+            `, "warm")}
+
+            ${card("糖尿病饮食：更推荐", `
+              ${list([
+                "燕麦：GI 约 55，升糖相对慢，更顶饿。",
+                "杂粮饭：GI 受搭配影响，一般比纯精白主食更稳。",
+                "豆类：多数豆类 GI 较低，蛋白质和膳食纤维都不错。",
+                "蔬菜：多数蔬菜 GI 低，可以增加饱腹感。",
+                "鸡蛋、鱼、豆腐：补蛋白，帮助身体维持力气。",
+                "牛奶、酸奶：补蛋白和钙，选择无糖或低糖更好。",
+              ], true)}
+              <p class="muted">这些食物升糖更慢，更容易稳定血糖。</p>
+            `, "green")}
+
+            ${card("GI 升糖指数", `
+              <div class="columns">
+                ${card("低 GI：血糖升得慢", list(["燕麦", "豆类", "牛奶", "酸奶", "大多数蔬菜"]), "green")}
+                ${card("中 GI：适量吃", list(["玉米", "红薯", "全麦面包"]), "warm")}
+                ${card("高 GI：别吃太多", list(["白米饭", "白馒头", "白面包", "白粥", "糖果"]), "red-soft")}
+              </div>
+            `)}
+
+            ${card("餐盘建议", `
+              <div class="plate">
+                <div class="veg">半盘<br />蔬菜</div>
+                <div style="background:#eef2ff;">四分之一<br />蛋白质</div>
+                <div style="background:#fff7e8;">四分之一<br />主食</div>
+              </div>
+              <p>主食不是不能吃，而是不要只吃主食。</p>
+            `)}
+
+            ${healthFooter()}
+          </main>
+          ${bottomNav()}
+        `;
+      }
+
+      function renderMom() {
+        return `
+          ${header("妈妈")}
+          <main class="page">
+            ${pageBand("妈妈健康提醒")}
+
+            ${card("妈妈今日打卡", `
+              <div class="check-grid">
+                ${checkButton("mom", "walked", "今天出门运动了吗？", momState.walked)}
+                ${checkButton("mom", "protein", "今天吃蛋白质了吗？", momState.protein)}
+                ${checkButton("mom", "goodMood", "今天心情好吗？", momState.goodMood)}
+              </div>
+              <div class="field">
+                <label for="appetite">今天胃口感觉怎么样？</label>
+                <select id="appetite" data-mom-appetite>
+                  ${["很好", "还可以", "一般", "不太想吃"].map((item) => `<option ${momState.appetite === item ? "selected" : ""}>${item}</option>`).join("")}
+                </select>
+              </div>
+            `, "green")}
+
+            ${card("今天记得", list([
+              "多少吃一点鸡蛋、豆腐、牛奶或酸奶。",
+              "饭后慢慢走 20 分钟，不用走很快。",
+              "慢慢吃、规律吃，比一顿吃很多更重要。",
+            ], true), "warm")}
+
+            <h2 class="section-title">妈妈专属提醒</h2>
+            ${actionGrid([
+              { title: "妈妈饮食建议", desc: "主食、蛋白质、蔬菜水果都写得更具体。", icon: "🍲", page: "momDiet" },
+              { title: "妈妈运动建议", desc: "每天活动一点点，不累也有帮助。", icon: "🚶", page: "momExercise" },
+            ])}
+            ${healthFooter()}
+          </main>
+          ${bottomNav()}
+        `;
+      }
+
+      function renderMomDiet() {
+        return `
+          ${header("妈妈饮食建议")}
+          <main class="page">
+            ${pageBand("妈妈每天吃什么更舒服、更均衡")}
+
+            ${card("主食怎么吃", `
+              ${list([
+                "妈妈常吃面条，一顿大约一小碗就可以，不要盛得太满。",
+                "如果这顿吃了馒头、饼或花卷，面条就少一点。",
+                "小米粥比较温和，但也属于主食，一次一小碗即可。",
+                "喝小米粥时，最好配一点鸡蛋、豆腐、牛奶或青菜。",
+                "一天主食大约 2-3 小碗，按胃口慢慢吃，不用硬撑。",
+              ], true)}
+              <div class="pill-row">${["面条", "馒头", "花卷", "饼", "小米粥", "玉米", "红薯", "南瓜"].map((x) => `<span class="pill">${x}</span>`).join("")}</div>
+            `)}
+
+            ${card("全谷物和杂豆是什么", `
+              <p>燕麦、玉米、红豆、绿豆、黑米、小米、红薯、南瓜，都可以算作更“粗一点”的主食选择。</p>
+              <p>这些食物升糖更慢、更容易饱，对血糖和身体更友好。</p>
+            `, "green")}
+
+            ${card("每天吃一点蛋白质", `
+              <p>蛋白质可以帮助身体维持肌肉、体力和抵抗力。妈妈胃口不好时，也尽量每天吃一点蛋白质。</p>
+              <p>哪怕吃不多，也比完全不吃好。</p>
+              ${list([
+                "鸡蛋：一天 1 个左右即可。",
+                "牛奶：一天 250-300 毫升左右。",
+                "酸奶：一天 1 小杯，尽量选少糖或无糖。",
+                "豆腐：一天半块左右，可以炖汤或清蒸。",
+                "鱼：每周 2 次左右，清蒸、炖汤都可以。",
+                "鸡肉：一次一小掌心大小，去皮更清淡。",
+                "瘦猪肉：一次一小掌心大小，不用太油。",
+              ], true)}
+            `, "warm")}
+
+            ${card("蔬菜多吃一点", `
+              ${list([
+                "菠菜：含叶酸和膳食纤维，焯水后清炒或凉拌更温和。",
+                "西兰花：含维生素 C 和膳食纤维，蒸软一点更好嚼。",
+                "生菜：清爽好入口，可以增加一顿饭里的蔬菜量。",
+                "西红柿：酸甜开胃，可以做汤或炒鸡蛋。",
+                "黄瓜：水分多，清爽，但肠胃不舒服时少吃生冷。",
+                "胡萝卜：含胡萝卜素，炖汤或炒菜都可以。",
+              ], true)}
+            `)}
+
+            ${card("水果也可以每天吃一点", `
+              ${list([
+                "苹果：含果胶和膳食纤维，日常最方便。",
+                "香蕉：软、好入口，适合胃口一般时少量吃。",
+                "猕猴桃：维生素 C 较多，但太酸时少吃。",
+                "蓝莓：含花青素，一小把即可。",
+                "橙子：补充维生素 C，胃酸明显时少吃。",
+              ], true)}
+              <p class="muted">水果不能完全代替蔬菜。</p>
+            `)}
+
+            ${card("牛奶和豆制品为什么好", `
+              ${list([
+                "牛奶和酸奶能补钙、补蛋白，对骨骼和肌肉有帮助。",
+                "豆腐、豆浆是植物蛋白，口感软，胃口不好时也比较容易吃。",
+                "如果喝牛奶肚子不舒服，可以试试酸奶、温牛奶，或者少量多次。",
+              ], true)}
+            `, "green")}
+
+            ${card("温馨提醒", `
+              <p>妈妈胃口不好时，也记得多少吃一点鸡蛋、豆腐或者牛奶。</p>
+              <p>慢慢吃、规律吃，比一顿吃很多更重要。</p>
+            `, "warm")}
+            ${healthFooter()}
+          </main>
+          ${bottomNav()}
+        `;
+      }
+
+      function renderMomExercise() {
+        return `
+          ${header("妈妈运动建议")}
+          <main class="page">
+            ${pageBand("妈妈每天活动一点点就很好", "运动不是很累的事情，慢慢来就很好。")}
+
+            ${card("饭后散步", list([
+              "饭后慢慢走 10-20 分钟。",
+              "有助于消化。",
+              "有助于睡眠。",
+              "对血糖也有帮助。",
+              "走路不用很快，慢慢走也很好。",
+            ], true), "green")}
+
+            ${card("每天活动建议", list([
+              "每天累计活动 30 分钟左右即可。",
+              "可以分成早上 10 分钟、下午 10 分钟、晚上 10 分钟。",
+              "累的时候就少走一点，舒服最重要。",
+            ], true))}
+
+            ${card("久坐提醒", `
+              <p>看电视或坐太久时，每 1 小时起来活动 3-5 分钟。</p>
+            `, "warm")}
+
+            ${card("简单拉伸", list([
+              "活动肩膀。",
+              "伸伸腿。",
+              "转转腰。",
+              "帮助缓解腰背不舒服。",
+            ], true))}
+
+            ${card("热量消耗（简单版）", `
+              <div class="table">
+                <div class="table-row"><strong>慢走 30 分钟</strong><span>约 80-120 卡路里</span></div>
+                <div class="table-row"><strong>拖地 30 分钟</strong><span>约 100 卡路里</span></div>
+                <div class="table-row"><strong>买菜走路 30 分钟</strong><span>约 100 卡路里</span></div>
+              </div>
+              <p class="muted">不需要特别精准，知道“动一动有帮助”就可以。</p>
+            `)}
+
+            ${card("温柔提醒", `
+              <p>妈妈不用一下子运动很多，慢慢坚持更重要。</p>
+              <p>每天活动一点点，也比一直坐着好很多。</p>
+            `, "warm")}
+            ${healthFooter()}
+          </main>
+          ${bottomNav()}
+        `;
+      }
+
+      function renderFoodGuide() {
+        return `
+          ${header("食物小百科")}
+          <main class="page">
+            ${pageBand("每天吃一点，身体更舒服")}
+            <div class="grid">
+              ${foodItems.map(([name, effect, advice]) => card(name, `
+                <p><strong>作用：</strong>${h(effect)}</p>
+                <p><strong>建议：</strong>${h(advice)}</p>
+              `)).join("")}
+            </div>
+            ${healthFooter()}
+          </main>
+          ${bottomNav()}
+        `;
+      }
+
+      function render() {
+        const routes = {
+          home: renderHome,
+          knowledge: renderKnowledge,
+          appliances: renderAppliances,
+          applianceDetail: renderApplianceDetail,
+          dad: renderDad,
+          mom: renderMom,
+          momDiet: renderMomDiet,
+          momExercise: renderMomExercise,
+          foodGuide: renderFoodGuide,
+        };
+        $("#app").innerHTML = (routes[page] || renderHome)();
+      }
+
+      document.addEventListener("click", (event) => {
+        const pageButton = event.target.closest("[data-page]");
+        if (pageButton) {
+          page = pageButton.dataset.page;
+          window.scrollTo({ top: 0, behavior: "instant" });
+          render();
+          return;
+        }
+
+        const applianceButton = event.target.closest("[data-appliance]");
+        if (applianceButton) {
+          applianceId = applianceButton.dataset.appliance;
+          page = "applianceDetail";
+          window.scrollTo({ top: 0, behavior: "instant" });
+          render();
+          return;
+        }
+
+        if (event.target.closest("[data-back]")) {
+          if (page === "applianceDetail") page = "appliances";
+          else page = "home";
+          window.scrollTo({ top: 0, behavior: "instant" });
+          render();
+          return;
+        }
+
+        const toggle = event.target.closest("[data-toggle-scope]");
+        if (toggle) {
+          const scope = toggle.dataset.toggleScope;
+          const key = toggle.dataset.toggleKey;
+          if (scope === "dad") {
+            dadState[key] = !dadState[key];
+            save("dad");
+          }
+          if (scope === "mom") {
+            momState[key] = !momState[key];
+            save("mom");
+          }
+          render();
+        }
+      });
+
+      document.addEventListener("change", (event) => {
+        if (event.target.matches("[data-mom-appetite]")) {
+          momState.appetite = event.target.value;
+          save("mom");
+        }
+      });
+
+      if ("serviceWorker" in navigator && location.protocol !== "file:") {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+        });
+      }
+
+      render();
+    </script>
+  </body>
+</html>

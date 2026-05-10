@@ -1,0 +1,1046 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>给爸爸妈妈的生活指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              warm: {
+                bg: "#F7F8FA",
+                panel: "#FFFFFF",
+                ink: "#1F2937",
+                soft: "#F7F8FA",
+                line: "#E5E7EB",
+                orange: "#F59E0B",
+                green: "#07C160",
+                blue: "#07C160",
+                rose: "#FFF7E8",
+              },
+            },
+            boxShadow: {
+              soft: "0 2px 10px rgba(15, 23, 42, 0.06)",
+              lift: "0 4px 14px rgba(15, 23, 42, 0.08)",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-warm-bg text-warm-ink">
+    <style>
+      body {
+        min-height: 100vh;
+        font-family: Arial, "Microsoft YaHei", "PingFang SC", sans-serif;
+        background: #F7F8FA;
+        color: #1F2937;
+      }
+
+      .soft-pattern {
+        background: #FFFFFF;
+      }
+
+      .warm-grid {
+        background: #FFF7E8;
+      }
+
+      .big-button {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .big-button::before {
+        display: none;
+      }
+
+      .big-button > * {
+        position: relative;
+      }
+
+      .touch-highlight {
+        -webkit-tap-highlight-color: rgba(7, 193, 96, 0.18);
+      }
+
+      .wechat-card {
+        background: #FFFFFF;
+        border: 1px solid #EEF0F2;
+        border-radius: 18px;
+        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+      }
+
+      .wechat-tip {
+        background: #FFF7E8;
+      }
+
+      .wechat-done {
+        background: #E8F5E9;
+      }
+
+      .wechat-primary {
+        color: #07C160;
+      }
+    </style>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useEffect, useState } = React;
+
+      const todayKey = () => new Date().toISOString().slice(0, 10);
+
+      const appliances = [
+        {
+          id: "air",
+          name: "空调和空气质量",
+          icon: "🌬️",
+          summary: "手机天气和空调面板上的空气数字，爸妈可以这样看。",
+          sections: [
+            {
+              title: "手机上天气APP中空气质量指数怎么看",
+              icon: "🍃",
+              text: [
+                "1. AQI 0~50：优，空气很好，正常开窗、散步都可以。",
+                "2. AQI 51~100：良，空气还可以，爸妈正常活动就行。",
+                "3. AQI 101~150：轻度污染，老人、呼吸道敏感的人少在外面久待。",
+                "4. AQI 151~200：中度污染，尽量少开窗，外出戴口罩，回家洗脸洗手。",
+                "5. AQI 200以上：污染较重，能不出门就少出门，家里可以开空气净化器。"
+              ],
+            },
+            {
+              title: "空调控制面板上显示常见数字",
+              icon: "📟",
+              text: [
+                "1. PM2.5：细小灰尘，数值越低越好。室内参考值可看 50 μg/m³ 以下。",
+                "2. 甲醛：新家具、新装修容易有。室内参考值可看 0.08 mg/m³ 以下。",
+                "3. TVOC：很多气味混在一起的挥发物，室内参考值可看 0.60 mg/m³ 以下。",
+                "4. CO₂：屋里闷不闷的数字。室内参考值可看 0.10% 以下，也就是约 1000 ppm 以下。"
+              ],
+            },
+            {
+              title: "小提醒",
+              icon: "💛",
+              text: [
+                "1. 去甲醛：最实在的方法是通风。新家具、新窗帘、新柜子先多开窗散味，不要只靠香薰遮味。",
+                "2. 活性炭：可以放在柜子、抽屉等小空间，但要定期更换；放久了吸满了，效果会变差。",
+                "3. 绿植：可以让家里看着舒服，但不能代替通风、检测和净化器。",
+                "4. 提高空气质量：做饭开油烟机，家里少抽烟，勤擦灰，定期清洗空调滤网，雾霾天少开窗。",
+                "5. 空气不好的常见原因：新装修、新家具、厨房油烟、灰尘多、潮湿发霉、门窗关太久、人多屋里闷。"
+              ],
+            },
+          ],
+          refs: [
+            ["生态环境部：《环境空气质量指数（AQI）技术规定》HJ 633—2026", "https://www.mee.gov.cn/ywgz/fgbz/bz/bzwb/jcffbz/202602/t20260225_1144441.shtml"],
+            ["GB/T 18883-2022《室内空气质量标准》", "https://www.antpedia.com/standard/1176606906-1.html"],
+            ["GB/T 18883-2022《室内空气质量标准》发布解读", "https://www.caia.org.cn/site/content/14334.html"],
+          ],
+        },
+        {
+          id: "microwave",
+          name: "微波炉材质",
+          icon: "🍲",
+          summary: "看清楚什么能放，什么不能放，避免打火、融化和烫伤。",
+          sections: [
+            {
+              title: "一般可以放进去",
+              icon: "✅",
+              text: [
+                "1. 耐热玻璃：耐热玻璃碗、玻璃盘一般可以。",
+                "2. 普通陶瓷：没有金边银边的陶瓷碗、陶瓷盘一般可以。",
+                "3. 可微波塑料：写着“可微波”或“microwave safe”的塑料盒才可以。",
+                "4. 盖子：短时间加热可以用微波炉专用盖，盖子要留缝出气。"
+              ],
+            },
+            {
+              title: "不要放进去",
+              icon: "🚫",
+              text: [
+                "1. 金属类：金属碗、铁勺、叉子、带金边银边的盘子不要放。",
+                "2. 铝箔锡纸：一般不要放，容易反射微波、产生火花。",
+                "3. 普通塑料：一次性塑料饭盒、泡沫盒、普通塑料袋不要放，可能融化。",
+                "4. 密封食物：密封罐、带壳鸡蛋不要直接加热，里面压力变大可能会爆。"
+              ],
+            },
+            {
+              title: "加热饭菜的小办法",
+              icon: "🥣",
+              text: [
+                "1. 热饭菜：先热 1~2 分钟，不够再加 30 秒。",
+                "2. 热汤粥：拿出来时很烫，先停一会儿再端。",
+                "3. 防烫手：如果碗很烫，戴隔热手套，不要硬拿。"
+              ],
+            },
+          ],
+          refs: [
+            ["中新网消防安全提示：这些食品、餐具别放进微波炉", "https://qwgzyj.gqb.gov.cn/life/2025/12-26/10540560.shtml"],
+            ["GB 4806.7-2023《食品安全国家标准 食品接触用塑料材料及制品》", "https://hgt.cirs-group.com/tools/rsdb/detail/cyqnr4joqeio/"],
+          ],
+        },
+        {
+          id: "fridge",
+          name: "冰箱保存时间",
+          icon: "🧊",
+          summary: "哪些东西能放几天，写清楚一点，吃得更安心。",
+          sections: [
+            {
+              title: "冰箱温度先看这个",
+              icon: "🌡️",
+              text: [
+                "1. 冷藏室：最好保持在 4℃ 或以下。",
+                "2. 冷冻室：最好保持在 -18℃ 或以下。",
+                "3. 熟饭熟菜：不要在外面放太久，热天更要早一点放进冰箱。"
+              ],
+            },
+            {
+              title: "冷藏室大概能放多久",
+              icon: "📅",
+              text: [
+                "1. 剩饭剩菜：3~4 天内吃完。",
+                "2. 熟肉、熟鸡肉：3~4 天内吃完。",
+                "3. 生鸡肉、生鸭肉：1~2 天内做掉。",
+                "4. 生猪肉、牛肉、羊肉块：3~5 天内做掉。",
+                "5. 肉馅：1~2 天内做掉。",
+                "6. 鱼：1~3 天内吃完。",
+                "7. 带壳鸡蛋：3~5 周。煮熟的鸡蛋：约 1 周。"
+              ],
+            },
+            {
+              title: "冷冻室大概能放多久",
+              icon: "❄️",
+              text: [
+                "1. 猪肉、牛肉、羊肉块：冷冻大约 6~12 个月。",
+                "2. 肉馅：冷冻大约 3~4 个月。",
+                "3. 鸡块、鸭块：冷冻大约 1 年。",
+                "4. 鸡块、鸭块：冷冻大约 9 个月。",
+                "5. 鱼类：冷冻大约 2~6 个月，越早吃越新鲜。"
+              ],
+            },
+            {
+              title: "孩子给爸妈的小提醒",
+              icon: "💛",
+              text: [
+                "1. 闻着不对、颜色不对、表面发黏，就不要舍不得了。",
+                "2. 吃不完的菜分小盒装，凉得快，也更容易记住是哪一天做的。"
+              ],
+            },
+          ],
+          refs: [
+            ["科普中国：饭菜凉了放冰箱好，还是趁热放好", "https://www.kepuchina.cn/article/articleinfo?ar_id=87581&business_type=100&classify=0"],
+            ["央视网：剩菜剩饭储存和再加热提示", "https://news.cctv.cn/2025/01/27/ARTI4ochKFzoBKvsZxvF1NIK250127.shtml"],
+            ["科技日报/新华网：冰箱不是“保险箱”", "https://www.stdaily.com/web/gdxw/2026-02/18/content_475194.html"],
+          ],
+        },
+        {
+          id: "gas",
+          name: "厨房燃气安全",
+          icon: "🔥",
+          summary: "做饭前后看一眼燃气和火，厨房更安心。",
+          sections: [
+            {
+              title: "做饭前先看",
+              icon: "👀",
+              text: [
+                "1. 先闻一闻：如果厨房有明显煤气味，不要点火，不要开关电器，先开窗通风。",
+                "2. 看火苗：正常火苗多是蓝色，如果经常发黄、发红，可以提醒孩子检查灶具。",
+                "3. 锅边别放东西：纸巾、塑料袋、抹布不要靠近火。"
+              ],
+            },
+            {
+              title: "做饭后收尾",
+              icon: "✅",
+              text: [
+                "1. 先关灶具开关，再看一眼燃气阀门。",
+                "2. 出门或睡觉前，最好再检查一次厨房火和阀门。",
+                "3. 油锅起火不要用水泼，可以先关火，用锅盖盖住。"
+              ],
+            },
+          ],
+          refs: [],
+        },
+        {
+          id: "heater",
+          name: "热水器洗澡安全",
+          icon: "🚿",
+          summary: "洗澡时注意通风、防烫、防滑，尤其冬天别大意。",
+          sections: [
+            {
+              title: "洗澡前",
+              icon: "🛁",
+              text: [
+                "1. 浴室地面容易滑，先把拖鞋、防滑垫放好。",
+                "2. 水温不要一下调太高，先用手试水，避免烫伤。",
+                "3. 燃气热水器使用时要保持通风，洗澡时间不要太久。"
+              ],
+            },
+            {
+              title: "洗澡时和洗澡后",
+              icon: "💛",
+              text: [
+                "1. 如果觉得头晕、胸闷，马上停止洗澡，打开门窗，坐下休息。",
+                "2. 冬天洗澡不要空腹，也不要刚喝酒后洗澡。"
+              ],
+            },
+          ],
+          refs: [],
+        },
+      ];
+
+      const defaultDad = {
+        date: todayKey(),
+        wokeEarly: false,
+        exercised: false,
+        sleptEarly: false,
+        lessAlcohol: false,
+        goodMood: false,
+      };
+
+      const defaultMom = {
+        date: todayKey(),
+        breakfast: false,
+        appetite: "还可以",
+        walked: false,
+        protein: false,
+        goodMood: false,
+      };
+
+      const homeActions = [
+        {
+          page: "dadReminder",
+          icon: "👨",
+          title: "爸爸健康提醒",
+          desc: "少喝一点、早点睡一点，身体会轻松很多。",
+          color: "bg-white",
+        },
+        {
+          page: "mom",
+          icon: "👩",
+          title: "妈妈健康提醒",
+          desc: "吃一点、走一点，今天舒服一点就很好。",
+          color: "bg-white",
+        },
+      ];
+
+      const guideActions = [
+        {
+          page: "appliances",
+          icon: "🏠",
+          title: "家电安心指南",
+          desc: "空气质量、微波炉、冰箱保存这些知识。",
+          color: "bg-white",
+        },
+        {
+          page: "foodGuide",
+          icon: "🥚",
+          title: "食物百科",
+          desc: "肉、蛋、奶、水果、蔬菜、坚果都放在这里。",
+          color: "bg-white",
+        },
+      ];
+
+      function useLocalState(key, fallback) {
+        const [value, setValue] = useState(() => {
+          try {
+            const stored = localStorage.getItem(key);
+            return stored ? { ...fallback, ...JSON.parse(stored), date: todayKey() } : fallback;
+          } catch {
+            return fallback;
+          }
+        });
+
+        useEffect(() => {
+          localStorage.setItem(key, JSON.stringify(value));
+        }, [key, value]);
+
+        return [value, setValue];
+      }
+
+      function Button({ children, onClick, color = "bg-white", className = "", href }) {
+        const classes =
+          `touch-highlight ${color} ${className} block w-full rounded-[18px] border border-warm-line px-5 py-5 text-left text-[22px] font-bold leading-relaxed shadow-soft active:scale-[0.99]`;
+        if (href) {
+          return <a className={classes} href={href}>{children}</a>;
+        }
+        return <button className={classes} onClick={onClick}>{children}</button>;
+      }
+
+      function ActionCard({ item, onClick }) {
+        return (
+          <button
+            onClick={onClick}
+            className={`touch-highlight w-full rounded-[18px] border border-warm-line ${item.color} p-5 text-left shadow-soft active:scale-[0.99]`}
+          >
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#E8F5E9] text-3xl">{item.icon}</span>
+              <span className="text-[18px] font-bold text-warm-green">打开</span>
+            </div>
+            <h3 className="text-[22px] font-bold leading-snug">{item.title}</h3>
+            <p className="mt-2 text-[18px] font-normal leading-relaxed text-gray-600">{item.desc}</p>
+          </button>
+        );
+      }
+
+      function PageBand({ label, title, children, icon = "💛", color = "from-[#fff3e3] to-white" }) {
+        return (
+          <section className="mb-5 rounded-[18px] border border-warm-line bg-white p-5 shadow-soft">
+            <div className="mb-4 flex items-center gap-3">
+              <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#E8F5E9] text-3xl">{icon}</span>
+              <span className="rounded-full bg-[#FFF7E8] px-3 py-1 text-[18px] font-bold text-[#F59E0B]">{label}</span>
+            </div>
+            <h2 className="text-[28px] font-bold leading-snug">{title}</h2>
+            {children && <div className="mt-4 text-[19px] font-normal leading-loose text-gray-700">{children}</div>}
+          </section>
+        );
+      }
+
+      function Header({ title, onBack }) {
+        return (
+          <header className="sticky top-0 z-10 border-b border-warm-line bg-white px-4 py-4">
+            <div className="relative mx-auto flex max-w-3xl items-center gap-3">
+              {onBack && (
+                <button
+                  onClick={onBack}
+                  className="touch-highlight h-11 min-w-20 rounded-xl border border-warm-line bg-white text-[18px] font-bold text-warm-green sm:absolute sm:left-0"
+                >
+                  ← 返回
+                </button>
+              )}
+              <div className={onBack ? "min-w-0 flex-1 sm:px-24" : "w-full"}>
+                <h1 className={`text-[28px] font-bold leading-tight text-warm-ink ${onBack ? "sm:text-center" : "text-center"}`}>{title}</h1>
+              </div>
+            </div>
+          </header>
+        );
+      }
+
+      function Shell({ children }) {
+        return <main className="mx-auto max-w-4xl px-4 pb-32 pt-5 sm:px-6">{children}</main>;
+      }
+
+      function BottomNav({ page, setPage }) {
+        const items = [
+          ["home", "首页", "⌂"],
+          ["mom", "妈妈", "👩"],
+          ["dadReminder", "爸爸", "👨"],
+          ["knowledge", "知识普及", "📚"],
+        ];
+
+        return (
+          <nav className="fixed inset-x-0 bottom-0 z-20 mx-auto max-w-4xl border-t border-warm-line bg-white px-2 pb-2 pt-2">
+            <div className="grid grid-cols-4 gap-2">
+              {items.map(([target, label, icon]) => {
+                const knowledgePages = ["knowledge", "appliances", "applianceDetail", "momDiet", "momExercise", "foodGuide"];
+                const active = page === target || (target === "knowledge" && knowledgePages.includes(page));
+                return (
+                  <button
+                    key={target}
+                    onClick={() => setPage(target)}
+                    className={`touch-highlight rounded-xl px-2 py-2 text-center text-[16px] font-bold leading-tight active:scale-[0.99] ${
+                      active ? "bg-[#E8F5E9] text-warm-green" : "bg-white text-gray-600"
+                    }`}
+                  >
+                    <span className="block text-[24px]">{icon}</span>
+                    <span>{label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </nav>
+        );
+      }
+
+      function PageIntro({ children, color = "bg-warm-panel" }) {
+        return (
+          <section className={`mb-5 rounded-[18px] border border-warm-line ${color} p-5 shadow-soft`}>
+            <p className="text-[20px] font-normal leading-loose">{children}</p>
+          </section>
+        );
+      }
+
+      function SectionCard({ icon, title, children, color = "bg-white" }) {
+        return (
+          <section className="mb-5 rounded-[18px] border border-warm-line bg-white p-5 shadow-soft">
+            <h2 className="mb-4 flex items-center gap-3 text-[22px] font-bold leading-snug">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E8F5E9] text-[26px]">{icon}</span>
+              <span>{title}</span>
+            </h2>
+            <div className="space-y-3 text-[19px] font-normal leading-loose text-gray-700">{children}</div>
+          </section>
+        );
+      }
+
+      function BigList({ items, color = "bg-warm-soft" }) {
+        return (
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {items.map((item) => (
+              <li key={item} className="rounded-2xl border border-warm-line bg-warm-soft px-4 py-3 text-[19px] font-normal leading-relaxed">
+                {item}
+              </li>
+            ))}
+          </ul>
+        );
+      }
+
+      function HealthFooter() {
+        return (
+          <footer className="wechat-tip mt-6 space-y-3 rounded-[18px] border border-[#FDE8C3] p-5 shadow-soft">
+            <p className="text-[20px] font-bold leading-loose">慢慢来，照顾好身体，比什么都重要。</p>
+            <p className="text-[20px] font-normal leading-loose">规律一点、舒服一点，就已经很好了。</p>
+            <p className="border-t border-[#FDE8C3] pt-4 text-[16px] font-normal leading-relaxed text-gray-600">
+              部分内容参考《中国居民膳食指南（2022）》《健康中国行动（2019—2030年）》等国内公开健康建议，仅作为家庭生活参考。
+            </p>
+          </footer>
+        );
+      }
+
+      function ReferenceList({ refs = [] }) {
+        if (!refs.length) return null;
+        return (
+          <section className="mt-5 rounded-[18px] border border-warm-line bg-white p-5 shadow-soft">
+            <h2 className="mb-3 text-[22px] font-bold">国内参考文献</h2>
+            <ul className="space-y-3">
+              {refs.map(([label, url]) => (
+                <li key={url} className="text-[16px] font-normal leading-relaxed text-gray-600">
+                  <a className="underline decoration-warm-green decoration-2 underline-offset-4" href={url} target="_blank">
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        );
+      }
+
+      function FoodPlate() {
+        return (
+          <div className="space-y-4">
+            <div className="grid min-h-72 overflow-hidden rounded-[18px] border border-warm-line bg-white shadow-soft sm:grid-cols-2">
+              <div className="flex items-center justify-center bg-[#E8F5E9] p-5 text-center text-[22px] font-bold leading-relaxed">
+                半盘蔬菜
+              </div>
+              <div className="grid">
+                <div className="flex items-center justify-center bg-[#FFF7E8] p-5 text-center text-[20px] font-bold leading-relaxed">
+                  四分之一蛋白质
+                </div>
+                <div className="flex items-center justify-center bg-white p-5 text-center text-[20px] font-bold leading-relaxed">
+                  四分之一主食
+                </div>
+              </div>
+            </div>
+            <p className="rounded-[18px] border border-warm-line bg-white p-5 text-[20px] font-bold leading-loose shadow-soft">
+              主食不是不能吃，而是不要只吃主食。
+            </p>
+          </div>
+        );
+      }
+
+      function Home({ setPage }) {
+        return (
+          <>
+            <Header title="给爸爸妈妈的生活指南" />
+            <Shell>
+              <section className="mb-5 rounded-[18px] border border-warm-line bg-white p-5 shadow-soft">
+                <div className="mb-4 flex flex-wrap gap-2">
+                  <span className="rounded-full bg-[#E8F5E9] px-3 py-1 text-[18px] font-bold text-warm-green">郝煜伽整理</span>
+                  <span className="rounded-full bg-[#FFF7E8] px-3 py-1 text-[18px] font-bold text-[#F59E0B]">写给爸爸妈妈</span>
+                </div>
+                <div className="grid gap-4 md:grid-cols-[1.1fr_0.9fr] md:items-start">
+                  <div>
+                    <h2 className="text-[28px] font-bold leading-snug">儿女不在身边，爸爸妈妈用这个网站把自己照顾好。</h2>
+                  </div>
+                  <div className="rounded-[18px] bg-[#FFF7E8] p-4">
+                    <p className="mb-3 text-[22px] font-bold">今天先记住三件事</p>
+                    <div className="space-y-2 text-[18px] font-normal leading-relaxed">
+                      <p className="rounded-xl bg-[#E8F5E9] p-3">爸爸：今晚少一点酒，少抽烟，早点休息。</p>
+                      <p className="rounded-xl bg-white p-3">妈妈：吃一点蛋白质，早点睡觉，出门呼吸新鲜空气。</p>
+                      <p className="rounded-xl bg-white p-3">爸爸妈妈：今天也要记得开心，别太大压力了。</p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section className="mb-5 rounded-[18px] border border-warm-line bg-white p-5 shadow-soft">
+                <div className="mb-4 flex items-end justify-between gap-3">
+                  <div>
+                    <p className="text-[18px] font-bold text-warm-green">常用入口</p>
+                    <h2 className="text-[22px] font-bold">爸爸妈妈的每日提醒</h2>
+                  </div>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {homeActions.map((item) => (
+                    <ActionCard key={item.page} item={item} onClick={() => setPage(item.page)} />
+                  ))}
+                </div>
+              </section>
+
+              <section className="rounded-[18px] border border-warm-line bg-white p-5 shadow-soft">
+                <p className="text-[18px] font-bold text-warm-green">知识百科</p>
+                <h2 className="mb-4 text-[22px] font-bold">想查知识时看这里</h2>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {guideActions.map((item) => (
+                    <ActionCard key={item.page} item={item} onClick={() => setPage(item.page)} />
+                  ))}
+                </div>
+              </section>
+            </Shell>
+          </>
+        );
+      }
+
+      function Knowledge({ setPage }) {
+        return (
+          <>
+            <Header title="知识普及" onBack={() => setPage("home")} />
+            <Shell>
+              <PageBand label="慢慢看" title="把家里常用知识放在一起。" icon="📚" color="from-[#eef5ff] to-[#fffdf8]">
+                <p>这里像一个小百科，爸妈想查家电安全、食物作用和吃法时，可以从这里点开。</p>
+              </PageBand>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                {guideActions.map((item) => (
+                  <ActionCard key={item.page} item={item} onClick={() => setPage(item.page)} />
+                ))}
+              </div>
+            </Shell>
+          </>
+        );
+      }
+
+      function Appliances({ setPage, setApplianceId }) {
+        return (
+          <>
+            <Header title="家电安心指南" onBack={() => setPage("home")} />
+            <Shell>
+              <PageBand label="家里常用" title="家电安心指南" icon="🏠" color="from-[#fff3e3] to-[#eef5ff]" />
+              <div className="grid gap-5 sm:grid-cols-2">
+                {appliances.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      setApplianceId(item.id);
+                      setPage("applianceDetail");
+                    }}
+                    className="touch-highlight rounded-[18px] border border-warm-line bg-white p-5 text-left shadow-soft active:scale-[0.99]"
+                  >
+                    <span className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#E8F5E9] text-3xl">{item.icon}</span>
+                    <span className="block text-[22px] font-bold leading-snug">{item.name}</span>
+                    <span className="mt-2 block text-[18px] font-normal leading-relaxed text-gray-600">{item.summary}</span>
+                  </button>
+                ))}
+              </div>
+            </Shell>
+          </>
+        );
+      }
+
+      function ApplianceDetail({ applianceId, setPage }) {
+        const item = appliances.find((entry) => entry.id === applianceId) || appliances[0];
+        return (
+          <>
+            <Header title={item.name} onBack={() => setPage("appliances")} />
+            <Shell>
+              <PageBand label="家电小提醒" title={item.name} icon={item.icon} color="from-[#fff3e3] to-white">
+                <p>{item.summary}</p>
+              </PageBand>
+              {item.sections.map((section) => (
+                <SectionCard key={section.title} icon={section.icon} title={section.title}>
+                  {section.text.map((text) => (
+                    <p key={text}>{text}</p>
+                  ))}
+                </SectionCard>
+              ))}
+
+              <ReferenceList refs={item.refs} />
+            </Shell>
+          </>
+        );
+      }
+
+      function Toggle({ checked, onChange, label }) {
+        return (
+          <button
+            onClick={() => onChange(!checked)}
+            className={`touch-highlight flex w-full items-center justify-between rounded-[18px] border border-warm-line px-5 py-5 text-left text-[20px] font-bold shadow-soft active:scale-[0.99] ${
+              checked ? "bg-[#E8F5E9]" : "bg-white"
+            }`}
+          >
+            <span>{label}</span>
+            <span className={`rounded-full px-4 py-2 text-[18px] ${checked ? "bg-warm-green text-white" : "bg-warm-soft text-gray-600"}`}>
+              {checked ? "是" : "否"}
+            </span>
+          </button>
+        );
+      }
+
+      function NumberInput({ label, value, onChange, placeholder, suffix }) {
+        return (
+          <label className="block rounded-[18px] border border-warm-line bg-white p-5 shadow-soft">
+            <span className="mb-3 block text-[20px] font-bold">{label}</span>
+            <div className="flex items-center gap-3">
+              <input
+                className="min-h-14 w-full rounded-xl border border-warm-line px-4 text-[22px] font-bold outline-none focus:border-warm-green"
+                inputMode="decimal"
+                value={value}
+                placeholder={placeholder}
+                onChange={(event) => onChange(event.target.value)}
+              />
+              {suffix && <span className="text-[18px] font-bold">{suffix}</span>}
+            </div>
+          </label>
+        );
+      }
+
+      function CheckInCard({ title, note, items, values, setValues }) {
+        return (
+          <section className="mb-5 rounded-[18px] border border-warm-line bg-white p-5 shadow-soft">
+            <h2 className="mb-2 text-[22px] font-bold">{title}</h2>
+            {note && <p className="mb-4 text-[18px] leading-relaxed text-gray-600">{note}</p>}
+            <div className="space-y-3">
+              {items.map((item) => (
+                <Toggle
+                  key={item.key}
+                  checked={!!values[item.key]}
+                  onChange={(checked) => setValues({ ...values, [item.key]: checked })}
+                  label={item.label}
+                />
+              ))}
+            </div>
+          </section>
+        );
+      }
+
+      function MomHealth({ setPage }) {
+        const [mom, setMom] = useLocalState("parents-helper-mom", defaultMom);
+
+        return (
+          <>
+            <Header title="妈妈健康提醒" onBack={() => setPage("home")} />
+            <Shell>
+              <PageBand label="妈妈今天的小记录" title="吃得下、动一动，身体会更轻松。" icon="👩" color="from-[#fff0f3] to-white">
+              </PageBand>
+
+              <CheckInCard
+                title="妈妈今日打卡"
+                note="点一下就记录，不用写很多字。"
+                values={mom}
+                setValues={setMom}
+                items={[
+                  { key: "walked", label: "今天出门运动或散步 20 分钟了吗？" },
+                  { key: "protein", label: "今天吃蛋白质了吗？" },
+                  { key: "goodMood", label: "今天心情好吗？" },
+                ]}
+              />
+
+              <div className="space-y-4">
+                <label className="block rounded-[18px] border border-warm-line bg-white p-5 shadow-soft">
+                  <span className="mb-3 block text-[20px] font-bold">今日胃口如何</span>
+                  <select
+                    className="min-h-14 w-full rounded-xl border border-warm-line bg-white px-4 text-[22px] font-bold outline-none focus:border-warm-green"
+                    value={mom.appetite}
+                    onChange={(event) => setMom({ ...mom, appetite: event.target.value })}
+                  >
+                    <option>不好</option>
+                    <option>还可以</option>
+                    <option>很好</option>
+                  </select>
+                </label>
+              </div>
+
+              <section className="my-5 space-y-4">
+                <div className="rounded-[18px] border border-warm-line bg-white p-5 shadow-soft">
+                  <h2 className="mb-2 text-[22px] font-bold">推荐温和运动</h2>
+                  <p className="text-[19px] font-normal leading-loose text-gray-700">饭后休息一会儿，可以在家里或楼下慢慢走 20 分钟，不追求速度。</p>
+                </div>
+                <div className="rounded-[18px] border border-[#DCEEDD] bg-[#E8F5E9] p-5 shadow-soft">
+                  <p className="text-[20px] font-bold leading-loose">今天完成一点点就值得表扬。身体舒服最重要。</p>
+                </div>
+              </section>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Button onClick={() => setPage("momDiet")} color="bg-white">妈妈饮食建议</Button>
+                <Button onClick={() => setPage("momExercise")} color="bg-white">妈妈运动建议</Button>
+              </div>
+
+              <HealthFooter />
+            </Shell>
+          </>
+        );
+      }
+
+      function MomDiet({ setPage }) {
+        return (
+          <>
+            <Header title="妈妈每天吃什么更舒服、更均衡" onBack={() => setPage("home")} />
+            <Shell>
+              <PageBand label="妈妈饮食" title="不用吃很多，每天吃得均衡一点就好。" icon="🥣" color="from-[#fff0f3] to-[#fffdf8]">
+                <p>妈妈胃口不好时，不用强迫自己吃很多。每天吃一点主食、一点蛋白质、一点蔬菜，身体会更舒服。</p>
+              </PageBand>
+
+              <SectionCard icon="🍚" title="主食怎么吃" color="bg-white">
+                <p>妈妈平时更常吃面条和小米粥，主食不用吃太多，够舒服就好。</p>
+                <BigList items={["1. 面条：一顿熟面条约1小碗，别盛太满。", "2. 小米粥：一顿约1小碗，胃口不好时可以温热慢慢喝。", "3. 馒头/花卷：一次半个到1个即可。", "4. 红薯/南瓜：可以替换一部分主食，一次一小块。"]} />
+                <p>如果只喝粥容易饿，可以配一点鸡蛋、豆腐或牛奶，身体更有力气。</p>
+              </SectionCard>
+
+              <SectionCard icon="🥚" title="每天吃一点蛋白质" color="bg-[#fffdf8]">
+                <p>蛋白质能帮助维持肌肉、体力和免疫力。妈妈胃口不好时，也尽量每天吃一点。</p>
+                <BigList items={["1. 鸡蛋：每天1个比较合适，胃口好时也可以偶尔2个。", "2. 牛奶：每天约300ml，可以分早晚喝。", "3. 酸奶：选无糖或低糖，一天1小杯约100~150g。", "4. 豆腐：一顿吃几块，约半小碗即可。", "5. 鱼/鸡肉/瘦猪肉：每次吃手掌心大小一块，软一点更好嚼。"]} />
+                <p>哪怕吃不多，也比完全不吃好。</p>
+              </SectionCard>
+
+              <SectionCard icon="🥬" title="蔬菜多吃一点" color="bg-white">
+                <p>蔬菜不用按碗数死记，能每天多吃几口就很好。炒软、煮软，更适合胃口不好时吃。</p>
+                <BigList items={["1. 菠菜：含叶酸和钾，适合做汤或清炒。", "2. 西兰花：维生素和膳食纤维比较丰富，蒸软一点好入口。", "3. 西红柿：酸甜开胃，可以炒蛋或做汤。", "4. 胡萝卜：含胡萝卜素，炖软后更好吃。", "5. 黄瓜：清爽补水，胃不舒服时少吃凉的。"]} />
+              </SectionCard>
+
+              <SectionCard icon="🍎" title="水果可以吃一点" color="bg-[#fffdf8]">
+                <p>水果可以每天吃一点，但不能完全代替蔬菜。胃口不好时，先少量吃。</p>
+                <BigList items={["1. 苹果：温和、好买，切小块更容易吃。", "2. 香蕉：软、好嚼，胃口不好时可以吃半根到1根。", "3. 猕猴桃：维生素C较多，偏酸，胃不舒服时少一点。", "4. 蓝莓：小颗好入口，可以少量加在酸奶里。", "5. 橙子：补充水分和维生素C，别空腹吃太多。"]} />
+              </SectionCard>
+
+              <SectionCard icon="🥛" title="牛奶和豆制品" color="bg-white">
+                <p>牛奶能补充优质蛋白和钙，对中老年人的骨骼和肌肉都有帮助。每天约300ml比较合适。</p>
+                <p>豆腐、豆浆属于豆制品，能补充植物蛋白，口感也温和。胃口不好时，豆腐汤、豆浆都比较容易接受。</p>
+              </SectionCard>
+
+              <SectionCard icon="💛" title="孩子想说" color="bg-[#fff3e3]">
+                <p>妈妈胃口不好时，也记得多少吃一点鸡蛋、豆腐或者牛奶。</p>
+                <p>慢慢吃、规律吃，比一顿吃很多更重要。</p>
+              </SectionCard>
+
+              <HealthFooter />
+            </Shell>
+          </>
+        );
+      }
+
+      function DadReminder({ setPage }) {
+        const giRows = [
+          ["白粥", "约70以上", "高", "糊化很充分，容易让血糖升得快"],
+          ["白馒头", "约80左右", "高", "精白面做的主食，吃多了升糖快"],
+          ["普通面条", "约60~70", "中到高", "一大碗面条容易让血糖升得快，量要少一点"],
+          ["白面包", "约70以上", "高", "精制面粉做的，容易升糖"],
+          ["燕麦", "约55~57", "中等偏低", "比白粥更扛饿，升糖慢一点"],
+          ["玉米", "约55~60", "中等", "可以替换一部分主食"],
+          ["红薯", "约56~70", "中等", "看做法和品种，别吃太多"],
+          ["豆类", "约20~40", "低", "红豆、绿豆、扁豆这类更稳一点"],
+          ["牛奶/酸奶", "约30~40", "低", "无糖更合适"],
+          ["大多数蔬菜", "通常较低", "低", "可以多放在餐盘里"],
+        ];
+        const [dad, setDad] = useLocalState("parents-helper-dad", defaultDad);
+
+        return (
+          <>
+            <Header title="爸爸身体健康最重要" onBack={() => setPage("home")} />
+            <Shell>
+              <PageBand label="爸爸工作累，操心多，要注意身体。" title="爸爸身体健康最重要" icon="👨" color="from-[#eef8ef] to-[#fffdf8]" />
+
+              <CheckInCard
+                title="爸爸今日打卡"
+                values={dad}
+                setValues={setDad}
+                items={[
+                  { key: "wokeEarly", label: "今天早起了吗？" },
+                  { key: "exercised", label: "今天锻炼身体了吗？" },
+                  { key: "sleptEarly", label: "今天早睡了吗？" },
+                  { key: "lessAlcohol", label: "今天少喝酒了吗？" },
+                  { key: "goodMood", label: "今天心情好吗？" },
+                ]}
+              />
+
+              <SectionCard icon="🍶" title="喝酒提醒" color="bg-white">
+                <p>爸爸平时喝的是中国白酒，常见度数大约在 38度~53度，很多白酒在 50度左右。度数越高，同样一口里面的酒精越多。</p>
+                <div className="rounded-[18px] bg-[#FFF7E8] p-4">
+                  <p>按《中国居民膳食指南（2022）》：成年人如饮酒，每天酒精建议不超过 15g。</p>
+                  <p>50度白酒大约 38ml 就接近 15g 酒精，差不多不到一个小酒杯。</p>
+                </div>
+                <p>酒精进入身体后，肝脏会优先处理酒精。这个时候肝脏调节血糖的能力会受影响，血糖可能忽高忽低，尤其空腹喝、晚上喝、吃药后喝，更容易不稳。</p>
+                <p>酒还会影响睡眠。可能刚喝完觉得困，但后半夜更容易醒、睡不沉，第二天更累。</p>
+                <p>长期喝多了，会增加肝脏、血压、心脏、胰腺和神经方面的负担。</p>
+                <p>少喝一点，身体会轻松很多。</p>
+              </SectionCard>
+
+              <SectionCard icon="🌙" title="熬夜对身体的影响" color="bg-[#fffdf8]">
+                <BigList items={["睡少了，身体对胰岛素没那么敏感，血糖更容易高", "熬夜会让压力激素升高，血糖和血压都可能更不稳", "睡眠不足会让人更饿，更想吃重口味食物", "大脑休息不够，第二天反应慢、心烦、没精神", "经常熬夜，心血管负担也会增加"]} />
+              </SectionCard>
+
+              <SectionCard icon="🥗" title="糖尿病饮食：不用饿，关键是吃得稳" color="bg-white">
+                <div className="rounded-[18px] bg-[#FFF7E8] p-4">
+                  <h3 className="mb-3 text-[22px] font-bold text-[#F59E0B]">尽量少一点</h3>
+                  <BigList items={["白粥", "白馒头", "大量面条", "一顿饭只吃面不配菜", "喝酒后再吃很多主食"]} color="bg-white" />
+                </div>
+                <div className="rounded-[18px] bg-[#E8F5E9] p-4">
+                  <h3 className="mb-3 text-[22px] font-bold text-warm-green">更推荐这样吃</h3>
+                  <BigList items={["面条少一点，青菜和鸡蛋多一点", "燕麦粥替代白粥", "豆类放进主食里", "每餐多放蔬菜", "每天一个鸡蛋左右", "鱼、鸡肉、瘦肉换着吃", "豆腐、豆浆、牛奶、无糖酸奶"]} color="bg-white" />
+                </div>
+              </SectionCard>
+
+              <SectionCard icon="📊" title="常见食物升糖指数，给爸爸简单看" color="bg-[#fffdf8]">
+                <p>GI 可以理解为“这个食物让血糖升得快不快”。低 GI 更慢，高 GI 更快。不同品牌、做法、软硬程度会有差异，下面是家庭参考，不是精确诊断。</p>
+                <div className="grid gap-3">
+                  {giRows.map(([food, gi, level, note]) => (
+                    <div key={food} className="rounded-[18px] border border-warm-line bg-white p-4">
+                      <div className="mb-2 flex flex-wrap items-center gap-2">
+                        <span className="text-[22px] font-bold">{food}</span>
+                        <span className="rounded-full bg-warm-soft px-3 py-1 text-[17px] font-bold">GI {gi}</span>
+                        <span className="rounded-full bg-[#E8F5E9] px-3 py-1 text-[17px] font-bold text-warm-green">{level}</span>
+                      </div>
+                      <p className="text-[18px] font-normal leading-relaxed text-gray-600">{note}</p>
+                    </div>
+                  ))}
+                </div>
+              </SectionCard>
+
+              <SectionCard icon="🍽️" title="一餐怎么搭配" color="bg-[#eef5ff]">
+                <FoodPlate />
+              </SectionCard>
+
+              <ReferenceList
+                refs={[
+                  ["中国居民膳食指南（2022）控糖限酒建议", "https://dg.cnsoc.org/article/04/ApX3_ozGTmSoqQaFFh5z_Q.html"],
+                  ["国家卫健委：《成人糖尿病食养指南（2023年版）》", "https://www.nhc.gov.cn/sps/c100088/202301/f01895a06c5349ef999f25da833c166d.shtml"],
+                  ["《中国2型糖尿病防治指南（2020年版）》", "https://www.medsci.cn/guideline/show_article.do?id=b73881c0021e828f"],
+                  ["健康中国行动（2019—2030年）睡眠和慢病提示", "https://www.nhc.gov.cn/guihuaxxs/c100133/201907/2a6ed52f1c264203b5351bdbbadd2da8.shtml"],
+                  ["中国政府网：成年人每天应保持7到8小时睡眠", "https://www.gov.cn/xinwen/2019-07/23/content_5413376.htm"],
+                ]}
+              />
+              <HealthFooter />
+            </Shell>
+          </>
+        );
+      }
+
+      function MomExercise({ setPage }) {
+        return (
+          <>
+            <Header title="妈妈每天活动一点点就很好" onBack={() => setPage("home")} />
+            <Shell>
+              <PageBand label="妈妈运动" title="运动不用很累，慢慢动也很好。" icon="🚶" color="from-[#fff8d9] to-white">
+                <p>慢慢走一走、伸一伸，身体舒服一点就很好。</p>
+              </PageBand>
+
+              <SectionCard icon="🚶" title="饭后散步" color="bg-white">
+                <BigList items={["饭后慢慢走10~20分钟", "有助于消化", "有助于睡眠", "对血糖也有帮助"]} color="bg-[#eef8ef]" />
+                <p>走路不用很快，慢慢走也很好。</p>
+              </SectionCard>
+
+              <SectionCard icon="⏰" title="每天活动建议" color="bg-[#fffdf8]">
+                <p>每天累计活动30分钟左右即可。</p>
+                <BigList items={["早上10分钟", "下午10分钟", "晚上10分钟"]} />
+              </SectionCard>
+
+              <SectionCard icon="📺" title="久坐提醒" color="bg-white">
+                <p>看电视或坐太久时，每1小时起来活动3~5分钟。</p>
+              </SectionCard>
+
+              <SectionCard icon="🤸" title="简单拉伸" color="bg-[#fffdf8]">
+                <BigList items={["活动肩膀", "伸伸腿", "转转腰"]} color="bg-[#eef5ff]" />
+                <p>这些小动作能帮助缓解腰背不舒服。</p>
+              </SectionCard>
+
+              <SectionCard icon="🔥" title="热量消耗，简单看看" color="bg-[#fffdf8]">
+                <div className="overflow-hidden rounded-[18px] border border-warm-line bg-white">
+                  {[
+                    ["慢走30分钟", "约80~120卡路里"],
+                    ["拖地30分钟", "约100卡路里"],
+                    ["买菜走路30分钟", "约100卡路里"],
+                  ].map(([name, value]) => (
+                    <div key={name} className="grid grid-cols-2 border-b border-warm-line last:border-b-0">
+                      <div className="p-4 text-[18px] font-bold">{name}</div>
+                      <div className="bg-warm-soft p-4 text-[18px] font-bold">{value}</div>
+                    </div>
+                  ))}
+                </div>
+                <p>不用特别精准，知道动一动对身体有帮助就好。</p>
+              </SectionCard>
+
+              <SectionCard icon="💛" title="温柔提醒" color="bg-[#fff3e3]">
+                <p>妈妈不用一下子运动很多，慢慢坚持更重要。</p>
+                <p>每天活动一点点，也比一直坐着好很多。</p>
+              </SectionCard>
+
+              <HealthFooter />
+            </Shell>
+          </>
+        );
+      }
+
+      function FoodGuide({ setPage }) {
+        const cards = [
+          ["🥚", "鸡蛋", "鸡蛋含优质蛋白，也有卵磷脂、维生素A、B族维生素。对维持肌肉、体力和日常营养很有帮助。", "一般每天1个比较合适。胃口好、当天肉鱼吃得少时，也可以偶尔吃2个。煮蛋、蒸蛋比油煎更清淡。"],
+          ["🥛", "牛奶", "牛奶能补充优质蛋白和钙，对中老年人的骨骼、牙齿和肌肉都有帮助。", "每天约300ml，可以早上喝一杯，晚上再喝半杯。乳糖不耐受可以少量多次或选择舒化奶。"],
+          ["🥣", "酸奶", "酸奶含蛋白质和钙，口感软，胃口不好时更容易接受。部分酸奶也有助于肠道舒服。", "选无糖或低糖酸奶，一天1小杯约100~150g。不要把酸奶当甜点吃太多。"],
+          ["🐟", "鱼", "鱼肉蛋白质质量好，脂肪相对温和，很多鱼也含对心血管友好的脂肪酸。", "每周吃2次左右。清蒸、炖汤都可以，少做重油重辣。刺多的鱼要慢慢吃。"],
+          ["🐔", "鸡肉", "鸡肉蛋白质较多，去皮后脂肪相对少，适合补充体力。", "一顿吃手掌心大小一块即可。炖软、煮汤、清炒都可以，少油炸。"],
+          ["🥩", "瘦猪肉", "瘦肉能补充蛋白质和铁，对体力、精神状态有帮助。", "每次少量即可，切薄片、炖软一点更好嚼。肥肉和腊肉香肠要少吃。"],
+          ["⬜", "豆腐", "豆腐是植物蛋白，口感软，对胃口不好的人比较友好，也能补充钙和多种矿物质。", "一顿半小碗左右即可。豆腐汤、白菜炖豆腐、番茄豆腐都比较温和。"],
+          ["🥛", "豆浆", "豆浆能补充植物蛋白，早上喝比较方便。", "选择无糖豆浆更好。一次一杯约250ml，不要空腹喝太急。"],
+          ["🥬", "菠菜", "菠菜含叶酸、钾和膳食纤维，适合做汤或清炒。", "焯水后再炒或做汤，口感更软，也更适合中老年人吃。"],
+          ["🥦", "西兰花", "西兰花含维生素C、膳食纤维和多种植物营养素，饱腹感也不错。", "蒸软或焯水后清炒。不要煮太久，颜色保持绿色就好。"],
+          ["🥕", "胡萝卜", "胡萝卜含胡萝卜素，对眼睛和皮肤健康有帮助。", "炖软、炒软更好吃。和少量油一起做，吸收更好。"],
+          ["🍅", "西红柿", "西红柿酸甜开胃，含维生素C和番茄红素，适合胃口不好时做汤。", "可以做西红柿鸡蛋汤、西红柿面。胃酸明显时少吃太酸的。"],
+          ["🥒", "黄瓜", "黄瓜清爽、含水量高，适合搭配正餐。", "胃不舒服或天气凉时少吃冰凉黄瓜，可以放到常温再吃。"],
+          ["🍄", "香菇/蘑菇", "菌菇类有鲜味，也有膳食纤维，可以让饭菜更香。", "炒熟、煮熟再吃。可以和青菜、豆腐、鸡肉一起做。"],
+          ["🍎", "苹果", "苹果温和、好买、好保存，含膳食纤维，切小块更容易吃。", "每天半个到1个即可。牙口不好可以切薄片或蒸软一点。"],
+          ["🍊", "橙子", "橙子含维生素C，能补充水分，味道也比较开胃。", "一天半个到1个即可。不要空腹吃太多，胃酸时少吃。"],
+          ["🍌", "香蕉", "香蕉软、好嚼，能补充能量和钾。", "胃口不好时可以吃半根到1根。血糖需要控制时不要一次吃太多。"],
+          ["🥝", "猕猴桃", "猕猴桃维生素C较多，也有膳食纤维。", "偏酸，胃不舒服时少吃。可以饭后吃半个到1个。"],
+          ["🫐", "蓝莓", "蓝莓颗粒小，含花青素，适合少量搭配酸奶。", "一次一小把即可。价格贵时不用强求，普通水果也很好。"],
+          ["🥜", "坚果", "坚果含健康脂肪、维生素E和矿物质，对补充能量有帮助。", "少量即可，一天一小把，大约10g左右。选择原味，少吃盐焗、糖衣坚果。"],
+          ["🌾", "燕麦", "燕麦有膳食纤维，饱腹感强，升糖相对慢一些。", "可以煮成燕麦粥，别加太多糖。胃口不好时煮软一点。"],
+          ["🥣", "小米粥", "小米粥温热、软，胃口不好时容易接受。", "一顿1小碗即可。最好搭配鸡蛋、豆腐或牛奶，不要只喝粥。"],
+        ];
+
+        return (
+          <>
+            <Header title="每天吃一点，身体更舒服" onBack={() => setPage("home")} />
+            <Shell>
+              <PageBand label="食物百科" title="每天吃一点，身体更舒服。" icon="🥚" color="from-[#eef5ff] to-white" />
+
+              <div className="grid gap-5 sm:grid-cols-2">
+                {cards.map(([icon, title, effect, suggestion]) => (
+                  <section key={title} className="rounded-[18px] border border-warm-line bg-white p-5 shadow-soft">
+                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#E8F5E9] text-3xl">{icon}</div>
+                    <h2 className="mb-3 text-[22px] font-bold">{title}</h2>
+                    <p className="mb-2 text-[19px] font-normal leading-loose text-gray-700">作用：{effect}</p>
+                    <p className="text-[19px] font-normal leading-loose text-gray-700">建议：{suggestion}</p>
+                  </section>
+                ))}
+              </div>
+
+              <HealthFooter />
+            </Shell>
+          </>
+        );
+      }
+
+      function App() {
+        const [page, setPage] = useState("home");
+        const [applianceId, setApplianceId] = useState("air");
+
+        let screen = <Home setPage={setPage} />;
+        if (page === "appliances") screen = <Appliances setPage={setPage} setApplianceId={setApplianceId} />;
+        if (page === "applianceDetail") screen = <ApplianceDetail applianceId={applianceId} setPage={setPage} />;
+        if (page === "knowledge") screen = <Knowledge setPage={setPage} />;
+        if (page === "mom") screen = <MomHealth setPage={setPage} />;
+        if (page === "momDiet") screen = <MomDiet setPage={setPage} />;
+        if (page === "dadReminder") screen = <DadReminder setPage={setPage} />;
+        if (page === "momExercise") screen = <MomExercise setPage={setPage} />;
+        if (page === "foodGuide") screen = <FoodGuide setPage={setPage} />;
+
+        return (
+          <>
+            {screen}
+            <BottomNav page={page} setPage={setPage} />
+          </>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>
